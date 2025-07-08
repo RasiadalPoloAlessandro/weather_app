@@ -1,4 +1,4 @@
-package com.weater_app.weater_app
+package com.weater_app.weater_app.ui.components
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.fillMaxWidth

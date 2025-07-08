@@ -40,6 +40,8 @@ android {
 }
 
 dependencies {
+    val nav_version = "2.9.0"
+    implementation("androidx.navigation:navigation-compose:$nav_version")
     implementation ("co.yml:ycharts:2.1.0")
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
