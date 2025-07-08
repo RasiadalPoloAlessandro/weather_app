@@ -33,7 +33,7 @@ import androidx.compose.ui.unit.sp
 
 
 @Composable
-fun WeatherPage() {
+fun WeatherPage(viewModel: WeatherViewModel) {
 
     var city by remember {
         mutableStateOf("")
