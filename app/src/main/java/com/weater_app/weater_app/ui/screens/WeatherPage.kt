@@ -11,7 +11,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.weater_app.weater_app.WeatherViewModel
+import com.weater_app.weater_app.data.models.WeatherViewModel
 import com.weater_app.weater_app.ui.components.CreateChart
 import com.weater_app.weater_app.ui.components.WeatherAttributes
 import com.weater_app.weater_app.ui.components.WeatherMainCard
@@ -27,7 +27,7 @@ fun WeatherPage(navController: NavController, viewModel: WeatherViewModel) {
 
 
     Column {
-        WeatherTopBar()
+        WeatherTopBar(navController)
         Spacer(modifier = Modifier.height(32.dp))
         WeatherMainCard()
         Spacer(modifier = Modifier.height(32.dp))

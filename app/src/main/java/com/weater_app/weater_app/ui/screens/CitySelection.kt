@@ -18,12 +18,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import com.weater_app.weater_app.data.models.WeatherViewModel
 
-@Preview
+
 @Composable
-fun CitySelectionPage(){
+fun CitySelectionPage(navController: NavController, viewModel: WeatherViewModel){
 
     var city by remember {
         mutableStateOf("")
@@ -50,7 +51,9 @@ fun CitySelectionPage(){
                 }
             )
 
-            IconButton(onClick = {/*TODO*/}) {
+            IconButton(onClick = {
+                viewModel.getData(city)
+            }) {
                 Icon(imageVector = Icons.Default.Search,
                     contentDescription = "Search for any location")
             }

@@ -13,6 +13,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import com.weater_app.weater_app.navigation.Routes
 
 /*TopBar
 * Components:
@@ -21,20 +23,24 @@ import androidx.compose.ui.unit.dp
 * */
 
 @Composable
-fun WeatherTopBar() {
+fun WeatherTopBar(navController: NavController) {
     Row(
         modifier = Modifier.fillMaxWidth().padding(30.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.End
     ) {
-        IconButton(onClick = {/*TODO*/ }) {
+        IconButton(onClick = {
+            navController.navigate(Routes.weather_CitySelection)
+        }) {
             Icon(
                 imageVector = Icons.Default.AddCircle,
                 contentDescription = "Add Location"
             )
         }
 
-        IconButton(onClick =  {/*TODO*/ }){
+        IconButton(onClick =  {
+
+        }){
             Icon(
                 imageVector = Icons.Default.Menu,
                 contentDescription = "Open Menu"

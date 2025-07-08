@@ -8,7 +8,9 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.weater_app.weater_app.data.models.WeatherViewModel
 import com.weater_app.weater_app.navigation.Routes
+import com.weater_app.weater_app.ui.screens.CitySelectionPage
 import com.weater_app.weater_app.ui.screens.WeatherPage
 import com.weater_app.weater_app.ui.theme.MyApplicationTheme
 
@@ -28,6 +30,10 @@ class MainActivity : ComponentActivity() {
                 ) {
                     composable(Routes.weatherPage) {
                         WeatherPage(navController, weatherViewModel)
+                    }
+
+                    composable(Routes.weather_CitySelection) {
+                        CitySelectionPage(navController, weatherViewModel)
                     }
                 }
             }
