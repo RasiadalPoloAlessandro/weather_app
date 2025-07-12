@@ -1,4 +1,4 @@
-package com.weater_app.weater_app.data.api
+package com.weater_app.weater_app.data.api.weatherApi
 
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory

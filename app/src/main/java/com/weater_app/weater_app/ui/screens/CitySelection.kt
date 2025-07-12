@@ -21,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.weater_app.weater_app.data.models.WeatherViewModel
+import com.weater_app.weater_app.navigation.Routes
 
 
 @Composable
@@ -52,11 +53,16 @@ fun CitySelectionPage(navController: NavController, viewModel: WeatherViewModel)
             )
 
             IconButton(onClick = {
-                viewModel.getData(city)
+                /*Search for cities
+                Once I've selected the city, it'll change page and call the api
+                */
+                //TODO implement city research
+                navController.navigate(Routes.weatherPage)
             }) {
                 Icon(imageVector = Icons.Default.Search,
                     contentDescription = "Search for any location")
             }
         }
     }
+
 }

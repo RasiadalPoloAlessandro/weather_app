@@ -1,5 +1,11 @@
 package com.weater_app.weater_app.data.api
 
+import com.weater_app.weater_app.data.api.weatherApi.Clouds
+import com.weater_app.weater_app.data.api.weatherApi.Coord
+import com.weater_app.weater_app.data.api.weatherApi.Sys
+import com.weater_app.weater_app.data.api.weatherApi.Weather
+import com.weater_app.weater_app.data.api.weatherApi.Wind
+
 data class WeatherModel(
     val base: String,
     val clouds: Clouds,

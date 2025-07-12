@@ -1,5 +1,6 @@
-package com.weater_app.weater_app.data.api
+package com.weater_app.weater_app.data.api.weatherApi
 
+import com.weater_app.weater_app.data.api.WeatherModel
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
