@@ -5,5 +5,5 @@ data class WeatherModel(
     val cnt: Int,
     val cod: String,
     val list: List<Item0>,
-    val message: Int
+    val message: Int,
 )
