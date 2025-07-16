@@ -18,7 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun WeatherMainCard() {
+fun WeatherMainCard(cityName : String, temperature: String) {
 
     Row(
         modifier = Modifier.fillMaxWidth(),
@@ -32,7 +32,7 @@ fun WeatherMainCard() {
         )
         Spacer(modifier = Modifier.width(8.dp))
         Text(
-            text = "Dublin",
+            text = cityName,
             fontSize = 30.sp
         )
     }
@@ -43,7 +43,7 @@ fun WeatherMainCard() {
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
-            text = "20°C",
+            text = temperature,
             fontSize = 60.sp
         )
     }

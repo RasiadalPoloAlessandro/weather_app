@@ -57,6 +57,7 @@ fun CitySelectionPage(navController: NavController, viewModel: WeatherViewModel)
                 Once I've selected the city, it'll change page and call the api
                 */
                 //TODO implement city research
+                viewModel.getWeather(city)
                 navController.navigate(Routes.weatherPage)
             }) {
                 Icon(imageVector = Icons.Default.Search,

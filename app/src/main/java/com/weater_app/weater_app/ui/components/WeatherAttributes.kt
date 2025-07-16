@@ -14,7 +14,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun WeatherAttributes(){
+fun WeatherAttributes(humidity: String, wind: String, pressure: String, visibiliy: String){
     Row (
         modifier = Modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
@@ -43,7 +43,7 @@ fun WeatherAttributes(){
                 color = Color.Gray
             )
             Text(
-                text = "65%",
+                text = humidity,
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Bold
             )
@@ -54,7 +54,7 @@ fun WeatherAttributes(){
                 color = Color.Gray
             )
             Text(
-                text = "15 km/h",
+                text = wind,
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Bold
             )
@@ -72,7 +72,7 @@ fun WeatherAttributes(){
                 color = Color.Gray
             )
             Text(
-                text = "1013 hPa",
+                text = pressure,
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Bold
             )
@@ -83,7 +83,7 @@ fun WeatherAttributes(){
                 color = Color.Gray
             )
             Text(
-                text = "10 km",
+                text = visibiliy,
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Bold
             )

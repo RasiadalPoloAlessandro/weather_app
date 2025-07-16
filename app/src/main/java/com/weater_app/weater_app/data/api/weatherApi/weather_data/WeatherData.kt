@@ -8,6 +8,8 @@ data class WeatherData(
     val humidity: String,
     val windSpeed: String,
     val country : String,
+    val pressure: String,
+    val visibility: String,
     val timestamp: Long = System.currentTimeMillis()
 ) {
 

@@ -20,7 +20,7 @@ class GetWeatherCase(
             }
 
             // Se non c'è cache valida, chiama l'API
-            val response = weatherApi.getCurrentWeather(city, Constant.apikey)
+            val response = weatherApi.getCurrentWeather(city)
 
             if (response.isSuccessful) {
                 response.body()?.let { apiResponse ->
@@ -35,6 +35,8 @@ class GetWeatherCase(
                             description = currentWeather.weather.firstOrNull()?.description ?: "N/A",
                             humidity = currentWeather.main.humidity.toString(),
                             windSpeed = currentWeather.wind.speed.toString(),
+                            pressure = currentWeather.main.pressure.toString(),
+                            visibility = currentWeather.visibility.toString(),
                             country = apiResponse.city.country
                         )
 
