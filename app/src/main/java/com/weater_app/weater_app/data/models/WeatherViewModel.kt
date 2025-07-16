@@ -65,4 +65,8 @@ class WeatherViewModel(private val getWeatherUseCase: GetWeatherCase) : ViewMode
 
 
     }
+
+    fun getWeatherByCoordinates(latitude: Double, longitude: Double) {
+
+    }
 }

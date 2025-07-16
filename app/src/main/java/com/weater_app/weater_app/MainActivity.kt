@@ -4,11 +4,15 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.runtime.remember
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.google.android.gms.location.LocationServices
 import com.weater_app.weater_app.data.api.weatherApi.WeatherDependency
+import com.weater_app.weater_app.data.location.Location_Manager
 import com.weater_app.weater_app.data.models.WeatherViewModel
 import com.weater_app.weater_app.navigation.Routes
 import com.weater_app.weater_app.ui.screens.CitySelectionPage
