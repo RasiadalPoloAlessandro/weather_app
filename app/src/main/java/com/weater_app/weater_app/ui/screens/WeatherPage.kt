@@ -120,12 +120,24 @@ fun WeatherPage(navController: NavController, viewModel: WeatherViewModel) {
                 }
             }
 
-            uiState.isLoading -> {
-                Box(
-                    modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center
+            // CAMBIATO: Prima controlla se ci sono dati, poi se c'è un errore
+            uiState.weatherData != null -> {
+                val data = uiState.weatherData
+
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(16.dp)
                 ) {
-                    CircularProgressIndicator()
+                    data?.let {
+                        WeatherMainCard(it.city, it.temperature)
+                        Spacer(modifier = Modifier.height(32.dp))
+                        WeatherWarning()
+                        Spacer(modifier = Modifier.height(40.dp))
+                        CreateChart()
+                        Spacer(modifier = Modifier.height(40.dp))
+                        WeatherAttributes(data.humidity, data.windSpeed, data.pressure, data.visibility)
+                    }
                 }
             }
 
@@ -155,23 +167,13 @@ fun WeatherPage(navController: NavController, viewModel: WeatherViewModel) {
                 }
             }
 
-            uiState.weatherData != null -> {
-                val data = uiState.weatherData
-
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(16.dp)
+            // CAMBIATO: isLoading viene controllato alla fine
+            uiState.isLoading -> {
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
                 ) {
-                    data?.let {
-                        WeatherMainCard(it.city, it.temperature)
-                        Spacer(modifier = Modifier.height(32.dp))
-                        WeatherWarning()
-                        Spacer(modifier = Modifier.height(40.dp))
-                        CreateChart()
-                        Spacer(modifier = Modifier.height(40.dp))
-                        WeatherAttributes(data.humidity, data.windSpeed, data.pressure, data.visibility)
-                    }
+                    CircularProgressIndicator()
                 }
             }
 

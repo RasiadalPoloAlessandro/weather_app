@@ -11,4 +11,11 @@ interface WeatherApi {
     suspend fun getCurrentWeather(
         @Query("q") cityName: String,
     ): Response<WeatherModel>
+
+
+    @GET("forecast")
+    suspend fun getCurrentWeatherByCoord(
+        @Query("lat") latitude: Double,
+        @Query("lon") longitude: Double,
+    ): Response<WeatherModel>
 }

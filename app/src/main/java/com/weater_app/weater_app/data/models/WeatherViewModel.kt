@@ -1,14 +1,10 @@
 package com.weater_app.weater_app.data.models
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.weater_app.weater_app.data.api.weatherApi.Constant
 import com.weater_app.weater_app.data.api.NetWorkResponse
 import com.weater_app.weater_app.data.api.weatherApi.RetrofitInstance
 import com.weater_app.weater_app.data.api.weatherApi.weather_data.WeatherData
-import com.weater_app.weater_app.data.api.weatherApi.weather_data.WeatherModel
 import com.weater_app.weater_app.data.cache.GetWeatherCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -66,7 +62,40 @@ class WeatherViewModel(private val getWeatherUseCase: GetWeatherCase) : ViewMode
 
     }
 
-    fun getWeatherByCoordinates(latitude: Double, longitude: Double) {
+    fun getWeatherByCoordinates(latitude: Double, longitude: Double, forceRefresh: Boolean = false) {
+        viewModelScope.launch {
+            _weatherResult.value = NetWorkResponse.Loading
+            _uiState.value = _uiState.value.copy(isLoading = true)
 
+            if (forceRefresh) {
+                // Se vogliamo forzare il refresh, possiamo implementare questa logica nel UseCase
+            }
+
+            val result = getWeatherUseCase.executeByCoord(latitude, longitude)
+
+            when (result) {
+                is NetWorkResponse.success -> {
+                    _weatherResult.value = result
+                    _uiState.value = _uiState.value.copy(
+                        isLoading = false,
+                        weatherData = result.data,
+                        errorMessage = null,
+                        isDataFromCache = true // Potresti aggiungere questa info nel UseCase
+                    )
+                }
+                is NetWorkResponse.Error -> {
+                    _weatherResult.value = result
+                    _uiState.value = _uiState.value.copy(
+                        isLoading = false,
+                        errorMessage = result.message,
+                        weatherData =  null
+                    )
+                }
+                is NetWorkResponse.Loading -> {
+                    _weatherResult.value = result
+                    _uiState.value = _uiState.value.copy(isLoading = true)
+                }
+            }
+        }
     }
 }

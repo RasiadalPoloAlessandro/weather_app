@@ -1,10 +1,8 @@
 package com.weater_app.weater_app.data.cache
 
 import com.weater_app.weater_app.data.api.NetWorkResponse
-import com.weater_app.weater_app.data.api.weatherApi.Constant
 import com.weater_app.weater_app.data.api.weatherApi.WeatherApi
 import com.weater_app.weater_app.data.api.weatherApi.weather_data.WeatherData
-import com.weater_app.weater_app.data.api.weatherApi.weather_data.WeatherModel
 
 class GetWeatherCase(
     private val weatherApi: WeatherApi,
@@ -42,6 +40,45 @@ class GetWeatherCase(
 
                         // Salva in cache
                         cacheManager.cacheWeather(city, weatherData)
+
+                        NetWorkResponse.success(weatherData)
+                    } else {
+                        NetWorkResponse.Error("No weather data available")
+                    }
+                } ?: NetWorkResponse.Error("Empty response body")
+            } else {
+                NetWorkResponse.Error("API Error: ${response.code()} - ${response.message()}")
+            }
+        } catch (e: Exception) {
+            NetWorkResponse.Error("Network error: ${e.message}")
+        }
+    }
+
+    suspend fun executeByCoord(latitude: Double, longitude: Double): NetWorkResponse<WeatherData> {
+        return try {
+
+            val response = weatherApi.getCurrentWeatherByCoord(latitude, longitude)
+
+            if (response.isSuccessful) {
+                response.body()?.let { apiResponse ->
+                    // Verifica che ci siano dati nella lista
+                    if (apiResponse.list.isNotEmpty()) {
+                        val currentWeather = apiResponse.list.first() // Prendi il primo elemento (tempo attuale)
+
+                        // Converti la risposta API in WeatherModel
+                        val weatherData = WeatherData(
+                            city = apiResponse.city.name,
+                            temperature = currentWeather.main.temp.toString(),
+                            description = currentWeather.weather.firstOrNull()?.description ?: "N/A",
+                            humidity = currentWeather.main.humidity.toString(),
+                            windSpeed = currentWeather.wind.speed.toString(),
+                            pressure = currentWeather.main.pressure.toString(),
+                            visibility = currentWeather.visibility.toString(),
+                            country = apiResponse.city.country
+                        )
+
+                        // Salva in cache
+                        cacheManager.cacheWeather(weatherData.city, weatherData)
 
                         NetWorkResponse.success(weatherData)
                     } else {
