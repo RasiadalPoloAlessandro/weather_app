@@ -84,7 +84,6 @@ fun WeatherPage(navController: NavController, viewModel: WeatherViewModel) {
         }
     }
 
-    WeatherTopBar(navController)
 
     val uiState by viewModel.uiState.collectAsState()
 
@@ -129,12 +128,15 @@ fun WeatherPage(navController: NavController, viewModel: WeatherViewModel) {
                         .fillMaxSize()
                         .padding(16.dp)
                 ) {
+                    WeatherTopBar(navController)
+                    Spacer(modifier = Modifier.height(32.dp))
+
                     data?.let {
                         WeatherMainCard(it.city, it.temperature)
                         Spacer(modifier = Modifier.height(32.dp))
                         WeatherWarning()
                         Spacer(modifier = Modifier.height(40.dp))
-                        CreateChart()
+                        CreateChart(it.temperatures)
                         Spacer(modifier = Modifier.height(40.dp))
                         WeatherAttributes(data.humidity, data.windSpeed, data.pressure, data.visibility)
                     }

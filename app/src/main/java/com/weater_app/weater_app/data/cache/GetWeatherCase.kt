@@ -3,6 +3,7 @@ package com.weater_app.weater_app.data.cache
 import com.weater_app.weater_app.data.api.NetWorkResponse
 import com.weater_app.weater_app.data.api.weatherApi.WeatherApi
 import com.weater_app.weater_app.data.api.weatherApi.weather_data.WeatherData
+import com.weater_app.weater_app.data.api.weatherApi.weather_data.WeatherPoint
 
 class GetWeatherCase(
     private val weatherApi: WeatherApi,
@@ -24,17 +25,22 @@ class GetWeatherCase(
                 response.body()?.let { apiResponse ->
                     // Verifica che ci siano dati nella lista
                     if (apiResponse.list.isNotEmpty()) {
-                        val currentWeather = apiResponse.list.first() // Prendi il primo elemento (tempo attuale)
-
+                        val currentWeatherData = apiResponse.list.first()
                         // Converti la risposta API in WeatherModel
                         val weatherData = WeatherData(
                             city = apiResponse.city.name,
-                            temperature = currentWeather.main.temp.toString(),
-                            description = currentWeather.weather.firstOrNull()?.description ?: "N/A",
-                            humidity = currentWeather.main.humidity.toString(),
-                            windSpeed = currentWeather.wind.speed.toString(),
-                            pressure = currentWeather.main.pressure.toString(),
-                            visibility = currentWeather.visibility.toString(),
+                            temperature = currentWeatherData.main.temp.toString(),
+                            description = currentWeatherData.weather.firstOrNull()?.description ?: "N/A",
+                            humidity = currentWeatherData.main.humidity.toString(),
+                            windSpeed = currentWeatherData.wind.speed.toString(),
+                            pressure = currentWeatherData.main.pressure.toString(),
+                            visibility = currentWeatherData.visibility.toString(),
+                            temperatures = apiResponse.list.map { item ->
+                                WeatherPoint(
+                                    item.main.temp.toFloat(),
+                                    item.dt_txt,
+                                )
+                            },
                             country = apiResponse.city.country
                         )
 
@@ -63,17 +69,24 @@ class GetWeatherCase(
                 response.body()?.let { apiResponse ->
                     // Verifica che ci siano dati nella lista
                     if (apiResponse.list.isNotEmpty()) {
-                        val currentWeather = apiResponse.list.first() // Prendi il primo elemento (tempo attuale)
+                        val currentWeather = apiResponse //List
+                        val currentWeatherData = currentWeather.list.first()
 
                         // Converti la risposta API in WeatherModel
                         val weatherData = WeatherData(
                             city = apiResponse.city.name,
-                            temperature = currentWeather.main.temp.toString(),
-                            description = currentWeather.weather.firstOrNull()?.description ?: "N/A",
-                            humidity = currentWeather.main.humidity.toString(),
-                            windSpeed = currentWeather.wind.speed.toString(),
-                            pressure = currentWeather.main.pressure.toString(),
-                            visibility = currentWeather.visibility.toString(),
+                            temperature = currentWeatherData.main.temp.toString(),
+                            description = currentWeatherData.weather.firstOrNull()?.description ?: "N/A",
+                            humidity = currentWeatherData.main.humidity.toString(),
+                            windSpeed = currentWeatherData.wind.speed.toString(),
+                            pressure = currentWeatherData.main.pressure.toString(),
+                            visibility = currentWeatherData.visibility.toString(),
+                            temperatures = currentWeather.list.map {
+                                item -> WeatherPoint(
+                                    item.main.temp.toFloat(),
+                                    item.dt_txt,
+                                )
+                            },
                             country = apiResponse.city.country
                         )
 

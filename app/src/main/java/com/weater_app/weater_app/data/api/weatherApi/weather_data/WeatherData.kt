@@ -10,6 +10,7 @@ data class WeatherData(
     val country : String,
     val pressure: String,
     val visibility: String,
+    val temperatures: List<WeatherPoint>,
     val timestamp: Long = System.currentTimeMillis()
 ) {
 
