@@ -3,6 +3,7 @@ package com.weater_app.weater_app.ui.screens
 import android.annotation.SuppressLint
 import android.location.Location
 import android.util.Log
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -13,6 +14,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -50,7 +52,6 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun WeatherPage(navController: NavController, viewModel: WeatherViewModel) {
-
     val context = LocalContext.current
 
     val locationManager = remember {
@@ -74,7 +75,6 @@ fun WeatherPage(navController: NavController, viewModel: WeatherViewModel) {
     // Gestione dei permessi
     LaunchedEffect(locationPermission.allPermissionsGranted) {
         if (locationPermission.allPermissionsGranted) {
-            // Ottieni la posizione solo quando i permessi sono concessi
             location = locationManager.getLocation()
         }
     }
@@ -86,7 +86,6 @@ fun WeatherPage(navController: NavController, viewModel: WeatherViewModel) {
         }
     }
 
-
     val uiState by viewModel.uiState.collectAsState()
 
     // Chiamata API quando la location cambia
@@ -96,9 +95,14 @@ fun WeatherPage(navController: NavController, viewModel: WeatherViewModel) {
         }
     }
 
-    Column {
+    // 🔹 Qui applichiamo il background dal tema attivo
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background)
+    ) {
         when {
-            // Mostra stato permessi se non concessi
+            // Stato permessi
             !locationPermission.allPermissionsGranted -> {
                 Column(
                     modifier = Modifier
@@ -110,18 +114,20 @@ fun WeatherPage(navController: NavController, viewModel: WeatherViewModel) {
                     Text(
                         text = "Permessi di localizzazione necessari",
                         style = MaterialTheme.typography.headlineSmall,
+                        color = MaterialTheme.colorScheme.onBackground,
                         textAlign = TextAlign.Center
                     )
                     Spacer(modifier = Modifier.height(16.dp))
                     Button(
-                        onClick = { locationPermission.launchMultiplePermissionRequest() }
+                        onClick = { locationPermission.launchMultiplePermissionRequest() },
+                        colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
                     ) {
                         Text("Concedi Permessi")
                     }
                 }
             }
 
-            // CAMBIATO: Prima controlla se ci sono dati, poi se c'è un errore
+            // Stato con dati caricati
             uiState.weatherData != null -> {
                 val data = uiState.weatherData
 
@@ -141,11 +147,17 @@ fun WeatherPage(navController: NavController, viewModel: WeatherViewModel) {
                         Spacer(modifier = Modifier.height(40.dp))
                         CreateChart(it.temperatures)
                         Spacer(modifier = Modifier.height(40.dp))
-                        WeatherAttributes(data.humidity, data.windSpeed, data.pressure, data.visibility)
+                        WeatherAttributes(
+                            data.humidity,
+                            data.windSpeed,
+                            data.pressure,
+                            data.visibility
+                        )
                     }
                 }
             }
 
+            // Stato errore
             uiState.errorMessage != null -> {
                 Column(
                     modifier = Modifier
@@ -156,7 +168,7 @@ fun WeatherPage(navController: NavController, viewModel: WeatherViewModel) {
                 ) {
                     Text(
                         text = "Errore: ${uiState.errorMessage}",
-                        color = Color.Red,
+                        color = MaterialTheme.colorScheme.error, // <-- colore errore del tema
                         textAlign = TextAlign.Center
                     )
                     Spacer(modifier = Modifier.height(16.dp))
@@ -172,23 +184,22 @@ fun WeatherPage(navController: NavController, viewModel: WeatherViewModel) {
                 }
             }
 
-            // CAMBIATO: isLoading viene controllato alla fine
+            // Stato loading
             uiState.isLoading -> {
                 Box(
                     modifier = Modifier.fillMaxSize(),
                     contentAlignment = Alignment.Center
                 ) {
-                    CircularProgressIndicator()
+                    CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
                 }
             }
 
             else -> {
-                // Stato iniziale - attende permessi o location
                 Box(
                     modifier = Modifier.fillMaxSize(),
                     contentAlignment = Alignment.Center
                 ) {
-                    CircularProgressIndicator()
+                    CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
                 }
             }
         }

@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -27,13 +28,16 @@ fun WeatherMainCard(cityName : String, temperature: String) {
     ) {
         Icon(
             imageVector = Icons.Default.LocationOn,
+            tint = MaterialTheme.colorScheme.onBackground,
             contentDescription = "Location",
             modifier = Modifier.size(30.dp)
         )
         Spacer(modifier = Modifier.width(8.dp))
         Text(
             text = cityName,
-            fontSize = 30.sp
+            fontSize = 30.sp,
+            style = MaterialTheme.typography.headlineSmall,
+            color = MaterialTheme.colorScheme.onBackground,
         )
     }
     Spacer(modifier = Modifier.height(32.dp))
@@ -43,8 +47,10 @@ fun WeatherMainCard(cityName : String, temperature: String) {
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
-            text = temperature,
-            fontSize = 60.sp
+            text = "$temperature°C",
+            fontSize = 60.sp,
+            style = MaterialTheme.typography.headlineSmall,
+            color = MaterialTheme.colorScheme.onBackground,
         )
     }
 }

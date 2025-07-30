@@ -11,6 +11,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -30,7 +31,7 @@ fun WeatherWarning(){
             modifier = Modifier
                 .border(
                     width = 3.dp,
-                    color = Color.Yellow,
+                    color = MaterialTheme.colorScheme.secondaryContainer,
                     shape = RoundedCornerShape(8.dp)
                 )
                 .padding(16.dp),
@@ -40,13 +41,16 @@ fun WeatherWarning(){
         ) {
             Icon(
                 imageVector = Icons.Default.Warning,
+                tint = MaterialTheme.colorScheme.onBackground,
                 contentDescription = "Warning",
                 modifier = Modifier.size(20.dp)
             )
 
             Text(
                 text = "PERICOLO ALTE TEMPERATURE",
-                fontSize = 20.sp,
+                style = MaterialTheme.typography.headlineSmall,
+                color = MaterialTheme.colorScheme.onBackground,
+                fontSize = 17.sp,
             )
         }
     }

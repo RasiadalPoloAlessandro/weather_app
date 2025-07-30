@@ -4,9 +4,11 @@ import android.annotation.SuppressLint
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -22,6 +24,7 @@ import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.nativeCanvas
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -55,12 +58,14 @@ fun Chart(
     val adjustedMax = maxTemp + padding
 
     var selectedPointIndex by remember { mutableIntStateOf(-1) }
+    val textColor = MaterialTheme.colorScheme.onBackground.toArgb()
+
 
     Canvas(
         modifier = modifier
             .fillMaxWidth()
             .height(300.dp)
-            .background(Color.White)
+            .background(MaterialTheme.colorScheme.background)
             .padding(16.dp)
             .pointerInput(Unit) {
                 detectTapGestures { offset ->
@@ -200,13 +205,12 @@ fun Chart(
                 val dateTime = LocalDateTime.parse(point.time.replace(" ", "T"))
                 val timeText = "%02d:%02d".format(dateTime.hour, dateTime.minute)
                 val x = chartLeft + (chartWidth / (sortedPoints.size - 1)) * index
-
                 drawContext.canvas.nativeCanvas.drawText(
                     timeText,
                     x,
                     chartBottom + 20.dp.toPx(),
                     android.graphics.Paint().apply {
-                        color = android.graphics.Color.BLACK
+                        color = textColor
                         textSize = 10.sp.toPx()
                         textAlign = android.graphics.Paint.Align.CENTER
                     }
