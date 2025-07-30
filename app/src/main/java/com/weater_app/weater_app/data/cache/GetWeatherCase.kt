@@ -12,21 +12,21 @@ class GetWeatherCase(
 
     suspend fun execute(city: String): NetWorkResponse<WeatherData> {
         return try {
-            // Prima controlla la cache
+           // Check the cache
             val cachedData = cacheManager.getCachedWeather(city)
             if (cachedData != null) {
                 return NetWorkResponse.success(cachedData)
             }
 
-            // Se non c'è cache valida, chiama l'API
+            // Call the API if the cache is empty
             val response = weatherApi.getCurrentWeather(city)
 
             if (response.isSuccessful) {
                 response.body()?.let { apiResponse ->
-                    // Verifica che ci siano dati nella lista
+                    //Check if there is data
                     if (apiResponse.list.isNotEmpty()) {
                         val currentWeatherData = apiResponse.list.first()
-                        // Converti la risposta API in WeatherModel
+                        // Collect all the data you need
                         val weatherData = WeatherData(
                             city = apiResponse.city.name,
                             temperature = currentWeatherData.main.temp.toInt().toString(),
@@ -44,7 +44,7 @@ class GetWeatherCase(
                             country = apiResponse.city.country
                         )
 
-                        // Salva in cache
+                        // Save in cache
                         cacheManager.cacheWeather(city, weatherData)
 
                         NetWorkResponse.success(weatherData)
@@ -67,12 +67,12 @@ class GetWeatherCase(
 
             if (response.isSuccessful) {
                 response.body()?.let { apiResponse ->
-                    // Verifica che ci siano dati nella lista
+                    // Check if there is data
                     if (apiResponse.list.isNotEmpty()) {
                         val currentWeather = apiResponse //List
                         val currentWeatherData = currentWeather.list.first()
 
-                        // Converti la risposta API in WeatherModel
+
                         val weatherData = WeatherData(
                             city = apiResponse.city.name,
                             temperature = currentWeatherData.main.temp.toInt().toString(),
@@ -90,7 +90,6 @@ class GetWeatherCase(
                             country = apiResponse.city.country
                         )
 
-                        // Salva in cache
                         cacheManager.cacheWeather(weatherData.city, weatherData)
 
                         NetWorkResponse.success(weatherData)

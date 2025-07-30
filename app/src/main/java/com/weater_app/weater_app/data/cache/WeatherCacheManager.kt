@@ -1,7 +1,6 @@
 package com.weater_app.weater_app.data.cache
 
 import com.weater_app.weater_app.data.api.weatherApi.weather_data.WeatherData
-import com.weater_app.weater_app.data.api.weatherApi.weather_data.WeatherModel
 
 class WeatherCacheManager {
 
