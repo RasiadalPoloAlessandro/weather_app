@@ -1,5 +1,6 @@
 package com.weater_app.weater_app.ui.screens
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -9,6 +10,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -31,9 +33,10 @@ fun CitySelectionPage(navController: NavController, viewModel: WeatherViewModel)
         mutableStateOf("")
     }
 
-
     Column (
-        modifier = Modifier.fillMaxWidth().padding(8.dp),
+        modifier = Modifier.fillMaxWidth()
+            .background(MaterialTheme.colorScheme.background)
+            .padding(8.dp),
         horizontalAlignment =  Alignment.CenterHorizontally
     ){
         Row(
@@ -42,13 +45,19 @@ fun CitySelectionPage(navController: NavController, viewModel: WeatherViewModel)
             horizontalArrangement = Arrangement.SpaceEvenly,
         ){
             OutlinedTextField(
-                modifier = Modifier.weight(1f),
+                modifier =
+                    Modifier.weight(1f)
+                    .background(MaterialTheme.colorScheme.secondaryContainer),
                 value = city,
                 onValueChange = {
                     city = it
                 },
                 label = {
-                    Text(text = "Cerca la città")
+                    Text(
+                        text = "Cerca la città",
+                        style = MaterialTheme.typography.headlineSmall,
+                        color = MaterialTheme.colorScheme.onBackground,
+                    )
                 }
             )
 
@@ -60,7 +69,9 @@ fun CitySelectionPage(navController: NavController, viewModel: WeatherViewModel)
                 viewModel.getWeather(city)
                 navController.navigate(Routes.weatherPage)
             }) {
-                Icon(imageVector = Icons.Default.Search,
+                Icon(
+                    imageVector = Icons.Default.Search,
+                    tint = MaterialTheme.colorScheme.onBackground,
                     contentDescription = "Search for any location")
             }
         }
