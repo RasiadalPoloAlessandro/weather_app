@@ -141,10 +141,8 @@ fun WeatherPage(navController: NavController, viewModel: WeatherViewModel) {
                     Spacer(modifier = Modifier.height(32.dp))
 
                     data?.let {
-                        WeatherMainCard(it.city, it.temperature)
+                        WeatherMainCard(it.city, it.temperature, it.description)
                         Spacer(modifier = Modifier.height(32.dp))
-                        WeatherWarning()
-                        Spacer(modifier = Modifier.height(40.dp))
                         CreateChart(it.temperatures)
                         Spacer(modifier = Modifier.height(40.dp))
                         WeatherAttributes(

@@ -29,7 +29,7 @@ class GetWeatherCase(
                         // Converti la risposta API in WeatherModel
                         val weatherData = WeatherData(
                             city = apiResponse.city.name,
-                            temperature = currentWeatherData.main.temp.toString(),
+                            temperature = currentWeatherData.main.temp.toInt().toString(),
                             description = currentWeatherData.weather.firstOrNull()?.description ?: "N/A",
                             humidity = currentWeatherData.main.humidity.toString(),
                             windSpeed = currentWeatherData.wind.speed.toString(),
@@ -37,7 +37,7 @@ class GetWeatherCase(
                             visibility = currentWeatherData.visibility.toString(),
                             temperatures = apiResponse.list.map { item ->
                                 WeatherPoint(
-                                    item.main.temp.toFloat(),
+                                    item.main.temp.toInt().toFloat(),
                                     item.dt_txt,
                                 )
                             },
@@ -75,7 +75,7 @@ class GetWeatherCase(
                         // Converti la risposta API in WeatherModel
                         val weatherData = WeatherData(
                             city = apiResponse.city.name,
-                            temperature = currentWeatherData.main.temp.toString(),
+                            temperature = currentWeatherData.main.temp.toInt().toString(),
                             description = currentWeatherData.weather.firstOrNull()?.description ?: "N/A",
                             humidity = currentWeatherData.main.humidity.toString(),
                             windSpeed = currentWeatherData.wind.speed.toString(),
@@ -83,7 +83,7 @@ class GetWeatherCase(
                             visibility = currentWeatherData.visibility.toString(),
                             temperatures = currentWeather.list.take(10).map {
                                 item -> WeatherPoint(
-                                    item.main.temp.toFloat(),
+                                    item.main.temp.toInt().toFloat(),
                                     item.dt_txt,
                                 )
                             },

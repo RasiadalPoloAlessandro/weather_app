@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun WeatherMainCard(cityName : String, temperature: String) {
+fun WeatherMainCard(cityName : String, temperature: String, description: String) {
 
     Row(
         modifier = Modifier.fillMaxWidth(),
@@ -35,11 +35,25 @@ fun WeatherMainCard(cityName : String, temperature: String) {
         Spacer(modifier = Modifier.width(8.dp))
         Text(
             text = cityName,
-            fontSize = 30.sp,
+            fontSize = 25.sp,
+            style = MaterialTheme.typography.headlineSmall,
+            color = MaterialTheme.colorScheme.onBackground,
+        )
+
+    }
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.Center,
+        verticalAlignment = Alignment.CenterVertically
+    ){
+        Text(
+            text = description,
+            fontSize = 20.sp,
             style = MaterialTheme.typography.headlineSmall,
             color = MaterialTheme.colorScheme.onBackground,
         )
     }
+
     Spacer(modifier = Modifier.height(32.dp))
     Row(
         modifier = Modifier.fillMaxWidth(),
