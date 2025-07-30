@@ -1,6 +1,7 @@
 package com.weater_app.weater_app.ui.components
 
 import android.annotation.SuppressLint
+import android.graphics.Paint
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
@@ -9,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -26,6 +28,7 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.text.drawText
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.weater_app.weater_app.data.api.weatherApi.weather_data.WeatherPoint
@@ -151,7 +154,7 @@ fun Chart(
                 path = areaPath,
                 brush = Brush.verticalGradient(
                     colors = listOf(
-                        Color.Blue.copy(alpha = 0.3f),
+                        Color.Green.copy(alpha = 0.3f),
                         Color.Transparent
                     )
                 )
@@ -178,7 +181,7 @@ fun Chart(
         chartPoints.forEachIndexed { index, point ->
             val isSelected = index == selectedPointIndex
             drawCircle(
-                color = if (isSelected) Color.Red else Color.Blue,
+                color = if (isSelected) Color.Yellow else Color.White,
                 radius = if (isSelected) 6.dp.toPx() else 4.dp.toPx(),
                 center = point
             )
@@ -191,11 +194,27 @@ fun Chart(
 
                 // Background del popup
                 drawRoundRect(
-                    color = Color.Black.copy(alpha = 0.8f),
+                    color = Color.Transparent.copy(alpha = 0.8f),
                     topLeft = Offset(point.x - 40.dp.toPx(), point.y - 60.dp.toPx()),
                     size = Size(80.dp.toPx(), 40.dp.toPx()),
                     cornerRadius = CornerRadius(8.dp.toPx())
                 )
+
+                val textX = point.x
+                val textY = point.y - 60.dp.toPx() + 25.dp.toPx()  // posiziona verticalmente all’interno del rettangolo
+
+                drawContext.canvas.nativeCanvas.drawText(
+                    "${sortedPoints.elementAt(index).temperatureValue}°C",
+                    textX,
+                    textY,
+                    android.graphics.Paint().apply {
+                        color = android.graphics.Color.WHITE
+                        textSize = 14.sp.toPx()
+                        textAlign = android.graphics.Paint.Align.CENTER
+                        isAntiAlias = true
+                    }
+                )
+
             }
         }
 
@@ -209,10 +228,10 @@ fun Chart(
                     timeText,
                     x,
                     chartBottom + 20.dp.toPx(),
-                    android.graphics.Paint().apply {
+                    Paint().apply {
                         color = textColor
                         textSize = 10.sp.toPx()
-                        textAlign = android.graphics.Paint.Align.CENTER
+                        textAlign = Paint.Align.CENTER
                     }
                 )
             }
