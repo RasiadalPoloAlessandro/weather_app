@@ -48,6 +48,8 @@ dependencies {
     implementation (libs.accompanist.permissions)
     
     implementation("androidx.compose.runtime:runtime-livedata:1.6.6")
+    implementation(libs.androidx.compose.ui.graphics)
+    implementation(libs.androidx.compose.ui.geometry)
     val retrofitVersion = "3.0.0"
     implementation("com.squareup.retrofit2:retrofit:$retrofitVersion")
     implementation("com.squareup.retrofit2:converter-gson:$retrofitVersion")

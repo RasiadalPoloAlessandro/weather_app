@@ -81,7 +81,7 @@ class GetWeatherCase(
                             windSpeed = currentWeatherData.wind.speed.toString(),
                             pressure = currentWeatherData.main.pressure.toString(),
                             visibility = currentWeatherData.visibility.toString(),
-                            temperatures = currentWeather.list.map {
+                            temperatures = currentWeather.list.take(10).map {
                                 item -> WeatherPoint(
                                     item.main.temp.toFloat(),
                                     item.dt_txt,
