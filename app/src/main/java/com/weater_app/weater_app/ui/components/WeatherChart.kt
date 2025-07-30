@@ -90,27 +90,27 @@ fun Chart(
 
         // Disegna il background del grafico
         drawRect(
-            color = Color.White,
+            color = Color.Transparent,
             topLeft = Offset(0f, 0f),
             size = Size(width, height)
         )
 
         // Disegna gli assi
         drawLine(
-            color = Color.Black,
+            color = Color.Transparent,
             start = Offset(chartLeft, chartBottom),
             end = Offset(chartRight, chartBottom),
             strokeWidth = 2.dp.toPx()
         )
 
         drawLine(
-            color = Color.Black,
+            color = Color.Transparent,
             start = Offset(chartLeft, chartTop),
             end = Offset(chartLeft, chartBottom),
             strokeWidth = 2.dp.toPx()
         )
 
-        // Disegna le linee della griglia
+        /*// Disegna le linee della griglia
         for (i in 0..4) {
             val y = chartTop + (chartHeight / 4) * i
             drawLine(
@@ -119,7 +119,7 @@ fun Chart(
                 end = Offset(chartRight, y),
                 strokeWidth = 1.dp.toPx()
             )
-        }
+        }*/
 
         // Calcola i punti del grafico
         val chartPoints = sortedPoints.mapIndexed { index, point ->
@@ -164,7 +164,7 @@ fun Chart(
 
             drawPath(
                 path = path,
-                color = Color.Blue,
+                color = Color.Black,
                 style = Stroke(width = 3.dp.toPx(), cap = StrokeCap.Round)
             )
         }
@@ -215,7 +215,7 @@ fun Chart(
         }
 
         // Etichette Y (temperature)
-        for (i in 0..4) {
+       /* for (i in 0..4) {
             val y = chartTop + (chartHeight / 4) * i
             val temp = adjustedMax - ((adjustedMax - adjustedMin) / 4) * i
 
@@ -229,6 +229,6 @@ fun Chart(
                     textAlign = android.graphics.Paint.Align.RIGHT
                 }
             )
-        }
+        }*/
     }
 }
