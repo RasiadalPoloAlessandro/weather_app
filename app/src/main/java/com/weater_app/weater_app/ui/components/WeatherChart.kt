@@ -1,10 +1,15 @@
 package com.weater_app.weater_app.ui.components
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
@@ -31,48 +36,57 @@ fun CreateChart(points: List<WeatherPoint>){
     //Data points aren't sorted
     val sortedPoints = points.sortedBy { it.time }
 
-    val pointsData: List<Point> = sortedPoints.mapIndexed { index, item ->
-        val dateTime = LocalDateTime.parse(item.time.replace(" ", "T"))
-        val hourFloat = dateTime.hour + (dateTime.minute / 60f)
-
-        //It has to have regular intervals
-        Point(index.toFloat(), item.temperatureValue)
+    val maxPoints = 10
+    val filteredPoints = if (sortedPoints.size > maxPoints) {
+        sortedPoints.chunked(sortedPoints.size / maxPoints).map { it.first() }
+    } else {
+        sortedPoints
     }
 
     // Get the range of all temperatures
-    val minTemp = pointsData.minOfOrNull { it.y } ?: 0f
-    val maxTemp = pointsData.maxOfOrNull { it.y } ?: 30f
+    val minTemp = filteredPoints.minOfOrNull { it.temperatureValue } ?: 0f
+    val maxTemp = filteredPoints.maxOfOrNull { it.temperatureValue} ?: 30f
     val tempRange = maxTemp - minTemp
     val padding = tempRange * 0.1f // 10% di padding
     val adjustedMin = minTemp - padding
     val adjustedMax = maxTemp + padding
 
-    val xAxisData = AxisData.Builder()
-        .axisStepSize(100.dp)
+    val steps = 8
+
+    val pointsData: List<Point> = filteredPoints.mapIndexed { index, item ->
+        val dateTime = LocalDateTime.parse(item.time.replace(" ", "T"))
+
+        //Normalize all the values
+        val normalizedTemp = ((item.temperatureValue - adjustedMin) / (adjustedMax - adjustedMin)) * steps
+
+        Point(index.toFloat(), normalizedTemp)
+    }
+
+   val xAxisData = AxisData.Builder()
+        .axisStepSize(70.dp)
         .steps(pointsData.size - 1)
         .labelData { i ->
             //Insert all the points
-            if (i < sortedPoints.size) {
+            if (i < filteredPoints.size) {
                 val dateTime = LocalDateTime.parse(sortedPoints[i].time.replace(" ", "T"))
                 String.format("%02d:%02d", dateTime.hour, dateTime.minute)
             } else {
                 ""
             }
         }
-        .labelAndAxisLinePadding(15.dp)
+        .labelAndAxisLinePadding(0.dp)
         .build()
 
-    val steps = 8
-    val yAxisData = AxisData.Builder()
+    /*val yAxisData = AxisData.Builder()
         .steps(steps)
-        .labelAndAxisLinePadding(20.dp)
+        .labelAndAxisLinePadding(0.dp)
         .labelData { i ->
             // Show the temperatures
             val tempStep = (adjustedMax - adjustedMin) / steps
             val temperature = adjustedMin + (i * tempStep)
             String.format("%.1f°C", temperature)
         }
-        .build()
+        .build()*/
 
     //Prepare the chart
     val lineChartData = LineChartData(
@@ -102,7 +116,8 @@ fun CreateChart(points: List<WeatherPoint>){
                                 val dateTime = LocalDateTime.parse(sortedPoints[index].time.replace(" ", "T"))
                                 "${String.format("%02d:%02d", dateTime.hour, dateTime.minute)}\n${String.format("%.1f°C", y)}"
                             } else {
-                                String.format("%.1f°C", y)
+                                val realTemp = adjustedMin + (y / steps) * (adjustedMax - adjustedMin)
+                                String.format("%.1f°C", realTemp)
                             }
                         }
                     )
@@ -110,15 +125,18 @@ fun CreateChart(points: List<WeatherPoint>){
             ),
         ),
         xAxisData = xAxisData,
-        yAxisData = yAxisData,
-        gridLines = GridLines(color = Color.Gray.copy(alpha = 0.3f)),
+        //yAxisData = yAxisData,
+        //gridLines = GridLines(color = Color.Gray.copy(alpha = 0.3f)),
         backgroundColor = Color.White
     )
 
-    LineChart(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(300.dp),
-        lineChartData = lineChartData
-    )
-}
+
+        LineChart(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(300.dp)
+                .background(Color.White)
+                .clip(RoundedCornerShape(8.dp)), // previene overflow visivo
+            lineChartData = lineChartData
+        )
+    }
