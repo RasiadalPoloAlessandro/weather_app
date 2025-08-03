@@ -67,7 +67,7 @@ fun CitySelectionPage(navController: NavController, viewModel: WeatherViewModel)
                 */
                 //TODO implement city research
                 viewModel.getWeather(city)
-                navController.navigate(Routes.weatherPage)
+                navController.navigate(Routes.firstPage)
             }) {
                 Icon(
                     imageVector = Icons.Default.Search,

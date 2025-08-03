@@ -21,7 +21,7 @@ fun WeatherAttributes(humidity: String, wind: String, pressure: String, visibili
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceEvenly
     ){
-        // Prima colonna
+
         Column(
             modifier = Modifier.weight(1f),
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -70,7 +70,7 @@ fun WeatherAttributes(humidity: String, wind: String, pressure: String, visibili
             )
         }
 
-        // Seconda colonna
+
         Column(
             modifier = Modifier.weight(1f),
             horizontalAlignment = Alignment.CenterHorizontally,

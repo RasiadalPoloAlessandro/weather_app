@@ -2,6 +2,7 @@ package com.weater_app.weater_app.ui.screens
 
 import android.annotation.SuppressLint
 import android.location.Location
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -33,6 +34,7 @@ import androidx.navigation.NavController
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import com.google.android.gms.location.LocationServices
+import com.weater_app.weater_app.data.api.weatherApi.weather_data.WeatherData
 import com.weater_app.weater_app.data.location.Location_Manager
 import com.weater_app.weater_app.data.models.WeatherViewModel
 import com.weater_app.weater_app.ui.components.CreateChart
@@ -40,11 +42,14 @@ import com.weater_app.weater_app.ui.components.WeatherAttributes
 import com.weater_app.weater_app.ui.components.WeatherMainCard
 import com.weater_app.weater_app.ui.components.WeatherTopBar
 
-
 @SuppressLint("PermissionLaunchedDuringComposition")
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
-fun WeatherPage(navController: NavController, viewModel: WeatherViewModel) {
+fun WeatherPage(
+    navController: NavController,
+    viewModel: WeatherViewModel,
+    preloadedWeatherData: WeatherData? = null // Optional param in case of there are cached data to use
+) {
     val context = LocalContext.current
 
     val locationManager = remember {
@@ -65,9 +70,54 @@ fun WeatherPage(navController: NavController, viewModel: WeatherViewModel) {
         mutableStateOf<Location?>(null)
     }
 
+    val uiState by viewModel.uiState.collectAsState()
+
+    if (preloadedWeatherData != null) {
+        Log.d("WeatherPage", "=== DATI PRECARICATI ===")
+        Log.d("WeatherPage", "Città: ${preloadedWeatherData.city}")
+        Log.d("WeatherPage", "Punti temperatura: ${preloadedWeatherData.temperatures.size}")
+        Log.d("WeatherPage", "Primi 3 timestamps:")
+        preloadedWeatherData.temperatures.take(3).forEach { point ->
+            Log.d("WeatherPage", "  ${point.time} - ${point.temperatureValue}°C")
+        }
+
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.background)
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .verticalScroll(rememberScrollState())
+                    .padding(16.dp)
+            ) {
+                WeatherTopBar(navController)
+                Spacer(modifier = Modifier.height(32.dp))
+
+                WeatherMainCard(
+                    preloadedWeatherData.city,
+                    preloadedWeatherData.temperature,
+                    preloadedWeatherData.description
+                )
+                Spacer(modifier = Modifier.height(32.dp))
+                CreateChart(preloadedWeatherData.temperatures)
+                Spacer(modifier = Modifier.height(40.dp))
+                WeatherAttributes(
+                    preloadedWeatherData.humidity,
+                    preloadedWeatherData.windSpeed,
+                    preloadedWeatherData.pressure,
+                    preloadedWeatherData.visibility
+                )
+            }
+        }
+        return
+    }
+
 
     LaunchedEffect(locationPermission.allPermissionsGranted) {
         if (locationPermission.allPermissionsGranted) {
+            Log.d("WeatherPage", "Ottenendo posizione corrente")
             location = locationManager.getLocation()
         }
     }
@@ -79,15 +129,13 @@ fun WeatherPage(navController: NavController, viewModel: WeatherViewModel) {
         }
     }
 
-    val uiState by viewModel.uiState.collectAsState()
-
     //Call the API
     LaunchedEffect(location) {
         location?.let {
+            Log.d("WeatherPage", "Chiamando API per coordinate: ${it.latitude}, ${it.longitude}")
             viewModel.getWeatherByCoordinates(it.latitude, it.longitude)
         }
     }
-
 
     Column(
         modifier = Modifier
@@ -119,9 +167,15 @@ fun WeatherPage(navController: NavController, viewModel: WeatherViewModel) {
                 }
             }
 
-
             uiState.weatherData != null -> {
                 val data = uiState.weatherData
+
+                Log.d("WeatherPage", "=== DATI POSIZIONE CORRENTE ===")
+                Log.d("WeatherPage", "Città: ${data?.city}")
+                Log.d("WeatherPage", "Punti temperatura: ${data?.temperatures?.size}")
+                data?.temperatures?.take(3)?.forEach { point ->
+                    Log.d("WeatherPage", "  ${point.time} - ${point.temperatureValue}°C")
+                }
 
                 Column(
                     modifier = Modifier
@@ -157,7 +211,7 @@ fun WeatherPage(navController: NavController, viewModel: WeatherViewModel) {
                 ) {
                     Text(
                         text = "Errore: ${uiState.errorMessage}",
-                        color = MaterialTheme.colorScheme.error, // <-- colore errore del tema
+                        color = MaterialTheme.colorScheme.error,
                         textAlign = TextAlign.Center
                     )
                     Spacer(modifier = Modifier.height(16.dp))

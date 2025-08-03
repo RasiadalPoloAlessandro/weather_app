@@ -7,12 +7,12 @@ import com.weater_app.weater_app.data.api.weatherApi.weather_data.WeatherPoint
 
 class GetWeatherCase(
     private val weatherApi: WeatherApi,
-    private val cacheManager: WeatherCacheManager
+    val cacheManager: WeatherCacheManager // Reso pubblico per l'accesso dal ViewModel
 ) {
 
     suspend fun execute(city: String): NetWorkResponse<WeatherData> {
         return try {
-           // Check the cache
+            // Check the cache
             val cachedData = cacheManager.getCachedWeather(city)
             if (cachedData != null) {
                 return NetWorkResponse.success(cachedData)
@@ -35,7 +35,7 @@ class GetWeatherCase(
                             windSpeed = currentWeatherData.wind.speed.toString(),
                             pressure = currentWeatherData.main.pressure.toString(),
                             visibility = currentWeatherData.visibility.toString(),
-                            temperatures = apiResponse.list.map { item ->
+                            temperatures = apiResponse.list.take(10).map { item ->
                                 WeatherPoint(
                                     item.main.temp.toInt().toFloat(),
                                     item.dt_txt,
@@ -62,7 +62,6 @@ class GetWeatherCase(
 
     suspend fun executeByCoord(latitude: Double, longitude: Double): NetWorkResponse<WeatherData> {
         return try {
-
             val response = weatherApi.getCurrentWeatherByCoord(latitude, longitude)
 
             if (response.isSuccessful) {
@@ -71,7 +70,6 @@ class GetWeatherCase(
                     if (apiResponse.list.isNotEmpty()) {
                         val currentWeather = apiResponse //List
                         val currentWeatherData = currentWeather.list.first()
-
 
                         val weatherData = WeatherData(
                             city = apiResponse.city.name,
@@ -82,10 +80,10 @@ class GetWeatherCase(
                             pressure = currentWeatherData.main.pressure.toString(),
                             visibility = currentWeatherData.visibility.toString(),
                             temperatures = currentWeather.list.take(10).map {
-                                item -> WeatherPoint(
-                                    item.main.temp.toInt().toFloat(),
-                                    item.dt_txt,
-                                )
+                                    item -> WeatherPoint(
+                                item.main.temp.toInt().toFloat(),
+                                item.dt_txt,
+                            )
                             },
                             country = apiResponse.city.country
                         )
@@ -103,5 +101,54 @@ class GetWeatherCase(
         } catch (e: Exception) {
             NetWorkResponse.Error("Network error: ${e.message}")
         }
+    }
+
+    // Handle Multiple cities
+
+    suspend fun addCityByName(cityName: String): NetWorkResponse<WeatherData> {
+        if (cacheManager.hasWeatherData(cityName)) {
+            val cachedData = cacheManager.getCachedWeather(cityName)
+            if (cachedData != null) {
+                return NetWorkResponse.success(cachedData)
+            }
+        }
+
+        return execute(cityName)
+    }
+
+    suspend fun addCityByCoordinates(latitude: Double, longitude: Double): NetWorkResponse<WeatherData> {
+        return executeByCoord(latitude, longitude)
+    }
+
+    fun removeCityFromCache(cityName: String) {
+        cacheManager.removeWeatherData(cityName)
+    }
+
+    fun getAllCachedWeatherData(): List<WeatherData> {
+        return cacheManager.getAllWeatherData()
+    }
+
+    fun getWeatherDataByIndex(index: Int): WeatherData? {
+        return cacheManager.getWeatherDataByIndex(index)
+    }
+
+    fun getTotalCachedCities(): Int {
+        return cacheManager.getWeatherDataCount()
+    }
+
+    suspend fun refreshCity(cityName: String): NetWorkResponse<WeatherData> {
+        return execute(cityName)
+    }
+
+    suspend fun refreshAllCities(): List<NetWorkResponse<WeatherData>> {
+        val results = mutableListOf<NetWorkResponse<WeatherData>>()
+        val allCities = cacheManager.getAllWeatherData()
+
+        allCities.forEach { weatherData ->
+            val result = execute(weatherData.city)
+            results.add(result)
+        }
+
+        return results
     }
 }

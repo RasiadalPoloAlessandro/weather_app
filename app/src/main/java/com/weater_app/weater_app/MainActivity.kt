@@ -16,6 +16,7 @@ import com.weater_app.weater_app.data.location.Location_Manager
 import com.weater_app.weater_app.data.models.WeatherViewModel
 import com.weater_app.weater_app.navigation.Routes
 import com.weater_app.weater_app.ui.screens.CitySelectionPage
+import com.weater_app.weater_app.ui.screens.ScreenPager
 import com.weater_app.weater_app.ui.screens.WeatherPage
 import com.weater_app.weater_app.ui.theme.MyApplicationTheme
 
@@ -32,8 +33,11 @@ class MainActivity : ComponentActivity() {
                 val navController = rememberNavController()
                 NavHost(
                     navController = navController,
-                    startDestination = Routes.weatherPage
+                    startDestination = Routes.firstPage
                 ) {
+                    composable(Routes.firstPage){
+                        ScreenPager(navController, weatherViewModel)
+                    }
                     composable(Routes.weatherPage) {
                         WeatherPage(navController, weatherViewModel)
                     }

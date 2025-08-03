@@ -72,7 +72,6 @@ fun Chart(
             .padding(16.dp)
             .pointerInput(Unit) {
                 detectTapGestures { offset ->
-                    // Calcola quale punto è stato toccato
                     val chartLeft = size.width * 0.1f
                     val chartWidth = size.width * 0.8f
 
@@ -96,14 +95,14 @@ fun Chart(
         val chartRight = chartLeft + chartWidth
         val chartBottom = chartTop + chartHeight
 
-        // Disegna il background del grafico
+
         drawRect(
             color = Color.Transparent,
             topLeft = Offset(0f, 0f),
             size = Size(width, height)
         )
 
-        // Disegna gli assi
+        // Axies
         drawLine(
             color = Color.Transparent,
             start = Offset(chartLeft, chartBottom),
@@ -118,7 +117,7 @@ fun Chart(
             strokeWidth = 2.dp.toPx()
         )
 
-        /*// Disegna le linee della griglia
+        /*
         for (i in 0..4) {
             val y = chartTop + (chartHeight / 4) * i
             drawLine(
@@ -129,7 +128,7 @@ fun Chart(
             )
         }*/
 
-        // Calcola i punti del grafico
+
         val chartPoints = sortedPoints.mapIndexed { index, point ->
             val x = chartLeft + (chartWidth / (sortedPoints.size - 1)) * index
             val normalizedTemp = (point.temperatureValue - adjustedMin) / (adjustedMax - adjustedMin)
@@ -137,7 +136,6 @@ fun Chart(
             Offset(x, y)
         }
 
-        // Disegna l'area sotto la curva (gradiente)
         if (chartPoints.size > 1) {
             val areaPath = Path()
             areaPath.moveTo(chartPoints[0].x, chartBottom)
@@ -161,7 +159,7 @@ fun Chart(
             )
         }
 
-        // Disegna la linea
+
         if (chartPoints.size > 1) {
             val path = Path()
             path.moveTo(chartPoints[0].x, chartPoints[0].y)
@@ -177,7 +175,7 @@ fun Chart(
             )
         }
 
-        // Disegna i punti
+
         chartPoints.forEachIndexed { index, point ->
             val isSelected = index == selectedPointIndex
             drawCircle(
@@ -186,13 +184,13 @@ fun Chart(
                 center = point
             )
 
-            // Mostra popup per il punto selezionato
+
             if (isSelected) {
                 val dateTime = LocalDateTime.parse(sortedPoints[index].time.replace(" ", "T"))
                 val timeText = "%02d:%02d".format(dateTime.hour, dateTime.minute)
                 val tempText = "%.1f°C".format(sortedPoints[index].temperatureValue)
 
-                // Background del popup
+
                 drawRoundRect(
                     color = Color.Transparent.copy(alpha = 0.8f),
                     topLeft = Offset(point.x - 40.dp.toPx(), point.y - 60.dp.toPx()),
@@ -218,7 +216,7 @@ fun Chart(
             }
         }
 
-        // Etichette X (orari)
+        // X axe
         sortedPoints.forEachIndexed { index, point ->
             if (index % 2 == 0) {
                 val dateTime = LocalDateTime.parse(point.time.replace(" ", "T"))
@@ -237,7 +235,6 @@ fun Chart(
             }
         }
 
-        // Etichette Y (temperature)
        /* for (i in 0..4) {
             val y = chartTop + (chartHeight / 4) * i
             val temp = adjustedMax - ((adjustedMax - adjustedMin) / 4) * i

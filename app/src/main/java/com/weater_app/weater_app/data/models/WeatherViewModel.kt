@@ -13,13 +13,12 @@ import kotlinx.coroutines.launch
 
 class WeatherViewModel(private val getWeatherUseCase: GetWeatherCase) : ViewModel() {
 
-
     private val weatherApi = RetrofitInstance.weatherApi
 
     private val _weatherResult = MutableStateFlow<NetWorkResponse<WeatherData>>(NetWorkResponse.Loading)
     val weatherResult: StateFlow<NetWorkResponse<WeatherData>> = _weatherResult.asStateFlow()
 
-    // Stato per l'UI
+    //Ui State (only for position)
     private val _uiState = MutableStateFlow(WeatherUiState())
     val uiState: StateFlow<WeatherUiState> = _uiState.asStateFlow()
 
@@ -29,7 +28,7 @@ class WeatherViewModel(private val getWeatherUseCase: GetWeatherCase) : ViewMode
             _uiState.value = _uiState.value.copy(isLoading = true)
 
             if (forceRefresh) {
-                // Se vogliamo forzare il refresh, possiamo implementare questa logica nel UseCase
+
             }
 
             val result = getWeatherUseCase.execute(city)
@@ -41,7 +40,7 @@ class WeatherViewModel(private val getWeatherUseCase: GetWeatherCase) : ViewMode
                         isLoading = false,
                         weatherData = result.data,
                         errorMessage = null,
-                        isDataFromCache = true // Potresti aggiungere questa info nel UseCase
+                        isDataFromCache = true
                     )
                 }
                 is NetWorkResponse.Error -> {
@@ -49,7 +48,7 @@ class WeatherViewModel(private val getWeatherUseCase: GetWeatherCase) : ViewMode
                     _uiState.value = _uiState.value.copy(
                         isLoading = false,
                         errorMessage = result.message,
-                        weatherData =  null
+                        weatherData = null
                     )
                 }
                 is NetWorkResponse.Loading -> {
@@ -58,8 +57,6 @@ class WeatherViewModel(private val getWeatherUseCase: GetWeatherCase) : ViewMode
                 }
             }
         }
-
-
     }
 
     fun getWeatherByCoordinates(latitude: Double, longitude: Double, forceRefresh: Boolean = false) {
@@ -68,7 +65,7 @@ class WeatherViewModel(private val getWeatherUseCase: GetWeatherCase) : ViewMode
             _uiState.value = _uiState.value.copy(isLoading = true)
 
             if (forceRefresh) {
-                // Se vogliamo forzare il refresh, possiamo implementare questa logica nel UseCase
+
             }
 
             val result = getWeatherUseCase.executeByCoord(latitude, longitude)
@@ -80,7 +77,7 @@ class WeatherViewModel(private val getWeatherUseCase: GetWeatherCase) : ViewMode
                         isLoading = false,
                         weatherData = result.data,
                         errorMessage = null,
-                        isDataFromCache = true // Potresti aggiungere questa info nel UseCase
+                        isDataFromCache = true
                     )
                 }
                 is NetWorkResponse.Error -> {
@@ -88,7 +85,7 @@ class WeatherViewModel(private val getWeatherUseCase: GetWeatherCase) : ViewMode
                     _uiState.value = _uiState.value.copy(
                         isLoading = false,
                         errorMessage = result.message,
-                        weatherData =  null
+                        weatherData = null
                     )
                 }
                 is NetWorkResponse.Loading -> {
@@ -97,5 +94,22 @@ class WeatherViewModel(private val getWeatherUseCase: GetWeatherCase) : ViewMode
                 }
             }
         }
+    }
+
+    fun getWeatherDataByIndex(index: Int): WeatherData? {
+        return getWeatherUseCase.getWeatherDataByIndex(index)
+    }
+
+    fun getTotalPages(): Int {
+
+        return getWeatherUseCase.getTotalCachedCities() + 1
+    }
+
+    fun getCitiesCount(): Int {
+        return getWeatherUseCase.getTotalCachedCities()
+    }
+
+    fun hasCities(): Boolean {
+        return getCitiesCount() > 0
     }
 }
