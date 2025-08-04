@@ -22,12 +22,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.weater_app.weater_app.data.models.WeatherViewModel
+import com.weater_app.weater_app.data.controllers.WeatherController
 import com.weater_app.weater_app.navigation.Routes
 
 
 @Composable
-fun CitySelectionPage(navController: NavController, viewModel: WeatherViewModel){
+fun CitySelectionPage(navController: NavController, viewModel: WeatherController){
 
     var city by remember {
         mutableStateOf("")

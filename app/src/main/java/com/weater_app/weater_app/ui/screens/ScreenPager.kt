@@ -5,14 +5,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
-import com.weater_app.weater_app.data.models.WeatherViewModel
+import com.weater_app.weater_app.data.controllers.WeatherController
 
 @Composable
-fun ScreenPager(navController: NavController, viewModel: WeatherViewModel) {
+fun ScreenPager(navController: NavController, viewModel: WeatherController) {
     //pageCount is based on how many cities are stored in cache
     val pageCount = viewModel.getTotalPages()
 

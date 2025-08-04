@@ -4,16 +4,12 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.runtime.remember
-import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.google.android.gms.location.LocationServices
 import com.weater_app.weater_app.data.api.weatherApi.WeatherDependency
-import com.weater_app.weater_app.data.location.Location_Manager
-import com.weater_app.weater_app.data.models.WeatherViewModel
+import com.weater_app.weater_app.data.controllers.WeatherController
 import com.weater_app.weater_app.navigation.Routes
 import com.weater_app.weater_app.ui.screens.CitySelectionPage
 import com.weater_app.weater_app.ui.screens.ScreenPager
@@ -26,7 +22,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         val viewModelFactory = WeatherDependency.provideWeatherViewModelFactory()
-        val weatherViewModel = ViewModelProvider(this, viewModelFactory)[WeatherViewModel::class.java]
+        val weatherController = ViewModelProvider(this, viewModelFactory)[WeatherController::class.java]
         setContent {
             MyApplicationTheme {
 
@@ -36,14 +32,14 @@ class MainActivity : ComponentActivity() {
                     startDestination = Routes.firstPage
                 ) {
                     composable(Routes.firstPage){
-                        ScreenPager(navController, weatherViewModel)
+                        ScreenPager(navController, weatherController)
                     }
                     composable(Routes.weatherPage) {
-                        WeatherPage(navController, weatherViewModel)
+                        WeatherPage(navController, weatherController)
                     }
 
                     composable(Routes.weather_CitySelection) {
-                        CitySelectionPage(navController, weatherViewModel)
+                        CitySelectionPage(navController, weatherController)
                     }
                 }
             }

@@ -36,7 +36,7 @@ import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import com.google.android.gms.location.LocationServices
 import com.weater_app.weater_app.data.api.weatherApi.weather_data.WeatherData
 import com.weater_app.weater_app.data.location.Location_Manager
-import com.weater_app.weater_app.data.models.WeatherViewModel
+import com.weater_app.weater_app.data.controllers.WeatherController
 import com.weater_app.weater_app.ui.components.CreateChart
 import com.weater_app.weater_app.ui.components.WeatherAttributes
 import com.weater_app.weater_app.ui.components.WeatherMainCard
@@ -47,7 +47,7 @@ import com.weater_app.weater_app.ui.components.WeatherTopBar
 @Composable
 fun WeatherPage(
     navController: NavController,
-    viewModel: WeatherViewModel,
+    viewModel: WeatherController,
     preloadedWeatherData: WeatherData? = null // Optional param in case of there are cached data to use
 ) {
     val context = LocalContext.current
