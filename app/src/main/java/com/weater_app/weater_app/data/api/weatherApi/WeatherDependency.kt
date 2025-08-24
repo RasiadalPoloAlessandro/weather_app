@@ -1,5 +1,6 @@
 package com.weater_app.weater_app.data.api.weatherApi
 
+import com.weater_app.weater_app.BuildConfig
 import com.weater_app.weater_app.data.cache.GetWeatherCase
 import com.weater_app.weater_app.data.cache.WeatherCacheManager
 import okhttp3.Interceptor
@@ -16,7 +17,7 @@ object WeatherDependency {
             val url = original.url.newBuilder()
                 .addQueryParameter("units", "metric")
                 .addQueryParameter("lang", "it")
-                .addQueryParameter("appid", Constant.apikey)
+                .addQueryParameter("appid", BuildConfig.API_KEY)
                 .build()
 
             val request = original.newBuilder()
