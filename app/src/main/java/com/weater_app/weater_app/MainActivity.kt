@@ -8,7 +8,9 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.weater_app.weater_app.data.api.CityDependency
 import com.weater_app.weater_app.data.api.weatherApi.WeatherDependency
+import com.weater_app.weater_app.data.controllers.CityController
 import com.weater_app.weater_app.data.controllers.WeatherController
 import com.weater_app.weater_app.navigation.Routes
 import com.weater_app.weater_app.ui.screens.CitySelectionPage
@@ -21,8 +23,10 @@ class MainActivity : ComponentActivity() {
 
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        val viewModelFactory = WeatherDependency.provideWeatherViewModelFactory()
-        val weatherController = ViewModelProvider(this, viewModelFactory)[WeatherController::class.java]
+        val weatherViewModelFactory = WeatherDependency.provideWeatherViewModelFactory()
+        val cityWeatherViewModelFactory = CityDependency.provideCityViewModelFactory()
+        val weatherController = ViewModelProvider(this, weatherViewModelFactory)[WeatherController::class.java]
+        val cityController = ViewModelProvider(this, cityWeatherViewModelFactory)[CityController::class.java]
         setContent {
             MyApplicationTheme {
 
@@ -39,7 +43,7 @@ class MainActivity : ComponentActivity() {
                     }
 
                     composable(Routes.weather_CitySelection) {
-                        CitySelectionPage(navController, weatherController)
+                        CitySelectionPage(navController, weatherController, cityController)
                     }
                 }
             }
