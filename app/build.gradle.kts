@@ -53,6 +53,8 @@ android {
 
 dependencies {
 
+    implementation("com.airbnb.android:lottie-compose:6.6.7")
+
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.7.1")
     //GMS - Google Mobile Service
     implementation (libs.play.services.location)

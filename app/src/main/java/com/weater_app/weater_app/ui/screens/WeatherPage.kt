@@ -30,7 +30,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import androidx.navigation.NavController
+import com.airbnb.lottie.compose.LottieAnimation
+import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.LottieConstants
+import com.airbnb.lottie.compose.rememberLottieComposition
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import com.google.android.gms.location.LocationServices
@@ -41,6 +46,7 @@ import com.weater_app.weater_app.ui.components.CreateChart
 import com.weater_app.weater_app.ui.components.WeatherAttributes
 import com.weater_app.weater_app.ui.components.WeatherMainCard
 import com.weater_app.weater_app.ui.components.WeatherTopBar
+import com.weater_app.weater_app.R
 
 @SuppressLint("PermissionLaunchedDuringComposition")
 @OptIn(ExperimentalPermissionsApi::class)
@@ -81,14 +87,28 @@ fun WeatherPage(
             Log.d("WeatherPage", "  ${point.time} - ${point.temperatureValue}°C")
         }
 
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(MaterialTheme.colorScheme.background)
+        val animationRes = viewModel.getWeatherAnimation(preloadedWeatherData.description)
+        val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(animationRes))
+
+        Box(modifier = Modifier.fillMaxSize()
+            .background(MaterialTheme.colorScheme.background)
         ) {
+            // Animazione di sfondo
+            LottieAnimation(
+                composition = composition,
+                iterations = LottieConstants.IterateForever,
+                speed = 0.5f,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .zIndex(-1f)
+                    .padding(bottom = 120.dp)
+            )
+
+            // Contenuto principale
             Column(
                 modifier = Modifier
                     .fillMaxSize()
+                    .background(MaterialTheme.colorScheme.background.copy(alpha = 0.8f))
                     .verticalScroll(rememberScrollState())
                     .padding(16.dp)
             ) {
@@ -113,7 +133,6 @@ fun WeatherPage(
         }
         return
     }
-
 
     LaunchedEffect(locationPermission.allPermissionsGranted) {
         if (locationPermission.allPermissionsGranted) {
@@ -169,6 +188,9 @@ fun WeatherPage(
 
             uiState.weatherData != null -> {
                 val data = uiState.weatherData
+                //Function that helps setting up the correct animation
+                val animationRes = data?.let {viewModel.getWeatherAnimation(it.description) } ?: R.raw.sunny
+                val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(animationRes))
 
                 Log.d("WeatherPage", "=== DATI POSIZIONE CORRENTE ===")
                 Log.d("WeatherPage", "Città: ${data?.city}")
@@ -177,26 +199,44 @@ fun WeatherPage(
                     Log.d("WeatherPage", "  ${point.time} - ${point.temperatureValue}°C")
                 }
 
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .verticalScroll(rememberScrollState())
-                        .padding(16.dp)
+                //Inside a box I can insert components in different layers
+                Box(modifier = Modifier.fillMaxSize()
+                    .background(MaterialTheme.colorScheme.background)
                 ) {
-                    WeatherTopBar(navController)
-                    Spacer(modifier = Modifier.height(32.dp))
+                    // First Layer
+                    LottieAnimation(
+                        composition = composition,
+                        iterations = LottieConstants.IterateForever,
+                        speed = 0.5f,
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .zIndex(-1f)
+                            .padding(bottom = 120.dp)
+                    )
 
-                    data?.let {
-                        WeatherMainCard(it.city, it.temperature, it.description)
+                    // Second Layer
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .background(MaterialTheme.colorScheme.background.copy(alpha = 0.8f))
+                            .verticalScroll(rememberScrollState())
+                            .padding(16.dp)
+                    ) {
+                        WeatherTopBar(navController)
                         Spacer(modifier = Modifier.height(32.dp))
-                        CreateChart(it.temperatures)
-                        Spacer(modifier = Modifier.height(40.dp))
-                        WeatherAttributes(
-                            data.humidity,
-                            data.windSpeed,
-                            data.pressure,
-                            data.visibility
-                        )
+
+                        data?.let {
+                            WeatherMainCard(it.city, it.temperature, it.description)
+                            Spacer(modifier = Modifier.height(32.dp))
+                            CreateChart(it.temperatures)
+                            Spacer(modifier = Modifier.height(40.dp))
+                            WeatherAttributes(
+                                data.humidity,
+                                data.windSpeed,
+                                data.pressure,
+                                data.visibility
+                            )
+                        }
                     }
                 }
             }

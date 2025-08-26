@@ -1,7 +1,10 @@
 package com.weater_app.weater_app.data.controllers
 
+import android.annotation.SuppressLint
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.weater_app.weater_app.R
 import com.weater_app.weater_app.data.api.NetWorkResponse
 import com.weater_app.weater_app.data.api.weatherApi.RetrofitInstance
 import com.weater_app.weater_app.data.api.weatherApi.weather_data.WeatherData
@@ -11,6 +14,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Date
 
 class WeatherController(private val getWeatherUseCase: GetWeatherCase) : ViewModel() {
 
@@ -114,5 +120,49 @@ class WeatherController(private val getWeatherUseCase: GetWeatherCase) : ViewMod
 
     fun hasCities(): Boolean {
         return getCitiesCount() > 0
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    fun getWeatherAnimation(weatherDescription: String): Int{
+        val currentTime = Calendar.getInstance()
+        val timeToMatch = Calendar.getInstance()
+
+        timeToMatch[Calendar.HOUR_OF_DAY] = 18
+        timeToMatch[Calendar.MINUTE] = 0
+
+        if(currentTime > timeToMatch)
+            Log.e("Time to match: ", "time matched")
+        else
+            Log.e("Time to match: ", "time not  ${currentTime.time}  ${timeToMatch.time}")
+
+        return when{
+
+            //Morning
+            weatherDescription.contains("limpido", ignoreCase = true) && currentTime < timeToMatch ->  R.raw.sunny
+
+            (currentTime < timeToMatch &&
+                    (weatherDescription.contains("nuvoloso", ignoreCase = true) ||
+                            weatherDescription.contains("nubi sparse", ignoreCase = true) ||
+                            weatherDescription.contains("nuvole", ignoreCase = true) ||
+                            weatherDescription.contains("coperto", ignoreCase = true))) -> R.raw.cloudy
+
+            currentTime < timeToMatch && weatherDescription.contains("nuvoloso", ignoreCase = true) -> R.raw.cloudy
+            currentTime < timeToMatch && (weatherDescription.contains("pioggia", ignoreCase = true) ||
+                    weatherDescription.contains("temporali", ignoreCase = true)) -> R.raw.rainy
+
+            //Night
+            weatherDescription.contains("limpido", ignoreCase = true) && currentTime > timeToMatch ->  R.raw.night
+
+            (currentTime > timeToMatch &&
+                    (weatherDescription.contains("nuvoloso", ignoreCase = true) ||
+                            weatherDescription.contains("nubi sparse", ignoreCase = true) ||
+                            weatherDescription.contains("nuvole", ignoreCase = true) ||
+                            weatherDescription.contains("coperto", ignoreCase = true))) -> R.raw.cloudy_night
+
+            currentTime > timeToMatch && (weatherDescription.contains("pioggia", ignoreCase = true) ||
+                    weatherDescription.contains("temporali", ignoreCase = true)) -> R.raw.rainy_night
+
+            else -> R.raw.sunny
+        }
     }
 }
