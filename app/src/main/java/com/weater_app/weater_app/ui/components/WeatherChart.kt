@@ -117,17 +117,6 @@ fun Chart(
             strokeWidth = 2.dp.toPx()
         )
 
-        /*
-        for (i in 0..4) {
-            val y = chartTop + (chartHeight / 4) * i
-            drawLine(
-                color = Color.Gray.copy(alpha = 0.3f),
-                start = Offset(chartLeft, y),
-                end = Offset(chartRight, y),
-                strokeWidth = 1.dp.toPx()
-            )
-        }*/
-
 
         val chartPoints = sortedPoints.mapIndexed { index, point ->
             val x = chartLeft + (chartWidth / (sortedPoints.size - 1)) * index
@@ -199,7 +188,7 @@ fun Chart(
                 )
 
                 val textX = point.x
-                val textY = point.y - 60.dp.toPx() + 25.dp.toPx()  // posiziona verticalmente all’interno del rettangolo
+                val textY = point.y - 60.dp.toPx() + 25.dp.toPx()
 
                 drawContext.canvas.nativeCanvas.drawText(
                     "${sortedPoints.elementAt(index).temperatureValue}°C",
@@ -234,21 +223,5 @@ fun Chart(
                 )
             }
         }
-
-       /* for (i in 0..4) {
-            val y = chartTop + (chartHeight / 4) * i
-            val temp = adjustedMax - ((adjustedMax - adjustedMin) / 4) * i
-
-            drawContext.canvas.nativeCanvas.drawText(
-                "%.1f°".format(temp),
-                chartLeft - 8.dp.toPx(),
-                y + 4.dp.toPx(),
-                android.graphics.Paint().apply {
-                    color = android.graphics.Color.BLACK
-                    textSize = 10.sp.toPx()
-                    textAlign = android.graphics.Paint.Align.RIGHT
-                }
-            )
-        }*/
     }
 }
