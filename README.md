@@ -55,5 +55,5 @@
   <img src="screenshots/Screen2.jpg" width="250" alt="City Search" style="margin: 0 10px;">
   <img src="screenshots/Screen3.jpg" width="250" alt="Weather Details" style="margin: 0 10px;">
   <br>
-  <em>Main Weather Display | City Search | Search Results with History</em>
+  <em>Main Weather Display | City Search | Search Results</em>
 </p>
