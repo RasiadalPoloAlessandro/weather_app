@@ -17,7 +17,6 @@ class GetCity(
                 response.body()?.let { apiResponseList ->
                     if (apiResponseList.isNotNull() && apiResponseList.isNotEmpty()) {
 
-                        // Mappa ogni elemento della lista API a CityResponse
                         val cityDataList = apiResponseList.map { apiResponse ->
                             CityResponse(
                                 name = apiResponse.name,

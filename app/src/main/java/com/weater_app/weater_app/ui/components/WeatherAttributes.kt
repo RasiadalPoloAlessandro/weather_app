@@ -27,19 +27,6 @@ fun WeatherAttributes(humidity: String, wind: String, pressure: String, visibili
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            Text(
-                text = "Precipitazioni",
-                fontSize = 16.sp,
-                style = MaterialTheme.typography.headlineSmall,
-                color = MaterialTheme.colorScheme.onBackground
-            )
-            Text(
-                text = "20°C",
-                fontSize = 20.sp,
-                fontWeight = FontWeight.Bold,
-                style = MaterialTheme.typography.headlineSmall,
-                color = MaterialTheme.colorScheme.onBackground
-            )
 
             Text(
                 text = "Umidità",
@@ -48,7 +35,7 @@ fun WeatherAttributes(humidity: String, wind: String, pressure: String, visibili
                 color = MaterialTheme.colorScheme.onBackground
             )
             Text(
-                text = humidity,
+                text = "$humidity %",
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Bold,
                 style = MaterialTheme.typography.headlineSmall,
@@ -62,7 +49,7 @@ fun WeatherAttributes(humidity: String, wind: String, pressure: String, visibili
                 color = MaterialTheme.colorScheme.onBackground
             )
             Text(
-                text = wind,
+                text = "$wind m/s",
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Bold,
                 style = MaterialTheme.typography.headlineSmall,
@@ -76,19 +63,7 @@ fun WeatherAttributes(humidity: String, wind: String, pressure: String, visibili
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            Text(
-                text = "Pressione",
-                fontSize = 16.sp,
-                style = MaterialTheme.typography.headlineSmall,
-                color = MaterialTheme.colorScheme.onBackground
-            )
-            Text(
-                text = pressure,
-                fontSize = 20.sp,
-                fontWeight = FontWeight.Bold,
-                style = MaterialTheme.typography.headlineSmall,
-                color = MaterialTheme.colorScheme.onBackground
-            )
+
 
             Text(
                 text = "Visibilità",
@@ -97,7 +72,7 @@ fun WeatherAttributes(humidity: String, wind: String, pressure: String, visibili
                 color = MaterialTheme.colorScheme.onBackground
             )
             Text(
-                text = visibiliy,
+                text = "$visibiliy m",
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Bold,
                 style = MaterialTheme.typography.headlineSmall,

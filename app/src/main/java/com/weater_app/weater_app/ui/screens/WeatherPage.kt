@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
@@ -99,9 +100,9 @@ fun WeatherPage(
                 iterations = LottieConstants.IterateForever,
                 speed = 0.5f,
                 modifier = Modifier
-                    .fillMaxSize()
+                    .fillMaxWidth()
                     .zIndex(-1f)
-                    .padding(bottom = 120.dp)
+                    .padding(top = 100.dp)
             )
 
             // Contenuto principale
@@ -209,9 +210,9 @@ fun WeatherPage(
                         iterations = LottieConstants.IterateForever,
                         speed = 0.5f,
                         modifier = Modifier
-                            .fillMaxSize()
+                            .fillMaxWidth()
                             .zIndex(-1f)
-                            .padding(bottom = 120.dp)
+                            .padding(top = 100.dp)
                     )
 
                     // Second Layer

@@ -144,9 +144,10 @@ class WeatherController(private val getWeatherUseCase: GetWeatherCase) : ViewMod
                     (weatherDescription.contains("nuvoloso", ignoreCase = true) ||
                             weatherDescription.contains("nubi sparse", ignoreCase = true) ||
                             weatherDescription.contains("nuvole", ignoreCase = true) ||
-                            weatherDescription.contains("coperto", ignoreCase = true))) -> R.raw.cloudy
+                            weatherDescription.contains("coperto", ignoreCase = true))) -> R.raw.partly_cloudy
 
             currentTime < timeToMatch && weatherDescription.contains("nuvoloso", ignoreCase = true) -> R.raw.cloudy
+
             currentTime < timeToMatch && (weatherDescription.contains("pioggia", ignoreCase = true) ||
                     weatherDescription.contains("temporali", ignoreCase = true)) -> R.raw.rainy
 
@@ -154,10 +155,12 @@ class WeatherController(private val getWeatherUseCase: GetWeatherCase) : ViewMod
             weatherDescription.contains("limpido", ignoreCase = true) && currentTime > timeToMatch ->  R.raw.night
 
             (currentTime > timeToMatch &&
-                    (weatherDescription.contains("nuvoloso", ignoreCase = true) ||
-                            weatherDescription.contains("nubi sparse", ignoreCase = true) ||
+                    (weatherDescription.contains("nubi sparse", ignoreCase = true) ||
                             weatherDescription.contains("nuvole", ignoreCase = true) ||
                             weatherDescription.contains("coperto", ignoreCase = true))) -> R.raw.cloudy_night
+
+            currentTime > timeToMatch && weatherDescription.contains("nuvoloso", ignoreCase = true) -> R.raw.cloudy
+
 
             currentTime > timeToMatch && (weatherDescription.contains("pioggia", ignoreCase = true) ||
                     weatherDescription.contains("temporali", ignoreCase = true)) -> R.raw.rainy_night

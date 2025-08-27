@@ -1,6 +1,7 @@
 package com.weater_app.weater_app.ui.components
 
 import android.annotation.SuppressLint
+import android.graphics.Color.rgb
 import android.graphics.Paint
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
@@ -141,7 +142,7 @@ fun Chart(
                 path = areaPath,
                 brush = Brush.verticalGradient(
                     colors = listOf(
-                        Color.Green.copy(alpha = 0.3f),
+                        Color(228, 248, 214),
                         Color.Transparent
                     )
                 )
@@ -168,7 +169,7 @@ fun Chart(
         chartPoints.forEachIndexed { index, point ->
             val isSelected = index == selectedPointIndex
             drawCircle(
-                color = if (isSelected) Color.Yellow else Color.White,
+                color = if (isSelected) Color(rgb(254, 235, 117)) else Color.White,
                 radius = if (isSelected) 6.dp.toPx() else 4.dp.toPx(),
                 center = point
             )
