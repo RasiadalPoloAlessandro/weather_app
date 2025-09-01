@@ -19,3 +19,10 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+-keep class **.R$raw$cloudy_json
+-keep class **.R$raw$cloudy_night_json
+-keep class **.R$raw$night_json
+-keep class **.R$raw$partly_cloudy_json
+-keep class **.R$raw$rainy_json
+-keep class **.R$raw$rainy_night_json
+-keep class **.R$raw$sunny_json
