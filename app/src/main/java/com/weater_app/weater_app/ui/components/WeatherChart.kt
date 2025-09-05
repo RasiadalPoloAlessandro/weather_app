@@ -60,6 +60,7 @@ fun Chart(
     val padding = tempRange * 0.1f
     val adjustedMin = minTemp - padding
     val adjustedMax = maxTemp + padding
+    val pointColor = MaterialTheme.colorScheme.onBackground
 
     var selectedPointIndex by remember { mutableIntStateOf(-1) }
     val textColor = MaterialTheme.colorScheme.onBackground.toArgb()
@@ -169,7 +170,11 @@ fun Chart(
         chartPoints.forEachIndexed { index, point ->
             val isSelected = index == selectedPointIndex
             drawCircle(
-                color = if (isSelected) Color(rgb(254, 235, 117)) else Color.White,
+                color = if (isSelected) {
+                    Color(rgb(254, 235, 117))
+                } else {
+                    pointColor
+                },
                 radius = if (isSelected) 6.dp.toPx() else 4.dp.toPx(),
                 center = point
             )
